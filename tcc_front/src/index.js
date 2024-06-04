@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import { GlobalContextProvider } from "./GlobalContext/GlobalContext";
 
 
+import Index from './components/Index';
+import Cart from './components/Cart';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
