@@ -14,6 +14,11 @@ const Form = () => {
           className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
       </div>
       <div className="flex flex-col">
+          <label className="text-sm" htmlFor="email">Senha</label>
+          <input type="password" placeholder="Digite seu Email" 
+          className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
+      </div>
+      <div className="flex flex-col">
           <a href="#" className="text-xs underline mb-2">Leia os termos</a>
           <div className="flex gap-2 item-center">
               <input type="checkbox" />

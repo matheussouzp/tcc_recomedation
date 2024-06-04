@@ -3,9 +3,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### instalar antes de executar
+npm install @fortawesome/react-fontawesome
+npm install @fortawesome/free-brands-svg-icons
+npm install react-router-dom
 
-In the project directory, you can run:
+
+npm i --save @fortawesome/fontawesome-svg-core
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-regular-svg-icons
+
 
 ### `npm start`
 
