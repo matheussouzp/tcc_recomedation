@@ -15,10 +15,6 @@
     "express": "^4.19.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-<<<<<<< HEAD:tcc_front/package.json
-=======
-    "react-helmet": "^6.1.0",
->>>>>>> a458081c4c317b999b063872f1b6fccaa52e77b7:package.json
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.5",

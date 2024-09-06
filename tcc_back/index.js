@@ -15,6 +15,8 @@ const OrderItem = require('./models/orderitem');
 const Category = require('./models/category'); 
 
 
+var userRouter = require('./router/userRouter');
+
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -36,6 +38,8 @@ app.post('/create-user', async (req, res) => {
     res.status(500).json({ error: 'Failed to create user' });
   }
 });
+
+app.use("/user", userRouter);
 
 
 sequelize.authenticate()

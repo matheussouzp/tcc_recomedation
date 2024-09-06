@@ -1,122 +1,83 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom';
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { GlobalContext } from "../GlobalContext/GlobalContext"; // Importe o GlobalContext
 
-export default function App() {
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { IsLoggedIn, setName: setGlobalName, setEmail: setGlobalEmail } = useContext(GlobalContext); // Pega os setters do contexto global
   const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
-
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setInputs((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
-
-  const submitHandler = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(inputs);
-
-    axios
-      .post(
-        "http://localhost:5000/api/user/register",
-        { ...inputs },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res);
-
-        if (!res.data.created) {
-          if (res.data.error_type === 0) {
-            toast.error(res.data.error[0].msg, {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else if (res.data.error_type === 1) {
-            toast.error(res.data.message, {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-        }
-
-        if (res.data.created) {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        alert(`Request error: ${err}`);
+    try {
+      const response = await axios.post("http://localhost:3001/user", {
+        name,
+        email,
+        password,
       });
-    //we will use axios to connect to the backend
+
+      if (response.status === 201) {
+        // Define o estado global após o registro bem-sucedido
+        IsLoggedIn(true); // Marca como logado
+        setGlobalName(response.data.name); // Salva o nome globalmente
+        setGlobalEmail(response.data.email); // Salva o email globalmente
+        navigate("/"); // Redireciona para a página inicial ou qualquer outra rota protegida
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("Erro no cadastro, tente novamente.");
+    }
   };
+
   return (
     <div className="bg-slate-900 min-h-screen w-full flex flex-col items-center justify-center">
-      <h1 className="font-bold text-[2rem] text-white">
-        Cadastro de usuário
-      </h1>
+      <h1 className="font-bold text-[2rem] text-white">Cadastrar</h1>
       <div className="w-96 mt-4 bg-stone-400 px-4 py-5 rounded-lg">
-        <form className="flex flex-col gap-3" onSubmit={submitHandler}>
-
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <div className="flex flex-col">
-            <label className="text-sm" htmlFor="email">Nome</label>
-            <input type="text" placeholder="Digite seu Nome"
-              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
+            <label className="text-sm" htmlFor="name">Nome</label>
+            <input
+              type="text"
+              placeholder="Digite seu Nome"
+              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="flex flex-col">
             <label className="text-sm" htmlFor="email">Email</label>
-            <input type="text" placeholder="Digite seu Email"
-              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
+            <input
+              type="text"
+              placeholder="Digite seu Email"
+              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="flex flex-col">
-            <label className="text-sm" htmlFor="email">Senha</label>
-            <input type="password" placeholder="Digite sua Senha"
-              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
-          </div>
-          <div className="flex flex-col">
-            <label className="text-sm" htmlFor="email">Confirme a Senha</label>
-            <input type="password" placeholder="Confirme sua Senha"
-              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"></input>
+            <label className="text-sm" htmlFor="password">Senha</label>
+            <input
+              type="password"
+              placeholder="Digite sua Senha"
+              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
-          <button type="submit" className="bg-slate-600 hover:bg-slate-500 font-medium text-sm py-2 rounded-lg text-white">Cadastrar</button>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <button type="submit" className="bg-slate-600 hover:bg-slate-500 font-medium text-sm py-2 rounded-lg text-white">
+            Cadastrar
+          </button>
         </form>
-
       </div>
-      <p className="text-slate-100 text-xs w-96 mt-2 text-center">Ao se inscrever, voce passara a receber as informação.</p>
     </div>
-
-
   );
 };
+
+export default Register;

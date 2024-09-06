@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState, useEffect } from "react";
 
 const initialState = {
   IsLoggedIn: false,
@@ -6,6 +6,7 @@ const initialState = {
   cart: [],
   codigo: "",
   email: "",
+  name: "",
 };
 
 const Reducer = (state, action) => {
@@ -15,12 +16,16 @@ const Reducer = (state, action) => {
         ...state,
         codigo: action.payload,
       };
-      case "SET_EMAIL":
-        return {
-          ...state,
-          email: action.payload,
-        };
-      
+    case "SET_EMAIL":
+      return {
+        ...state,
+        email: action.payload,
+      };
+      case "SET_NAME":
+  return {
+    ...state,
+    name: action.payload,
+  };
     case "ISADMIN_IN":
       return {
         ...state,
@@ -29,7 +34,7 @@ const Reducer = (state, action) => {
     case "ISLOGGED_IN":
       return {
         ...state,
-        IsLoggIn: action.payload,
+        IsLoggedIn: action.payload,
       };
     case "ADD_TO_CART":
       return {
@@ -54,7 +59,7 @@ const Reducer = (state, action) => {
             : item.quantity;
         }),
       };
-    case "DECEASE_QUANTITY":
+    case "DECREASE_QUANTITY":
       return {
         ...state,
         cart: state.cart.filter((item) => {
@@ -84,18 +89,27 @@ export const GlobalContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const [email, setEmail] = useState("");
 
+  // Carregar estado de login do localStorage
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    const loggedInStatus = localStorage.getItem("IsLoggedIn") === "true";
+    if (storedEmail) setEmail(storedEmail);
+    if (loggedInStatus) IsLoggedIn(loggedInStatus);
+  }, []);
+
   const Codigo = (codigo) => {
     dispatch({
       type: "SET_CODIGO",
       payload: codigo,
     });
   };
-  
+
   const IsLoggedIn = (data) => {
     dispatch({
       type: "ISLOGGED_IN",
       payload: data,
     });
+    localStorage.setItem("IsLoggedIn", data); // Salva no localStorage
   };
 
   const IsAdmin = (data) => {
@@ -128,7 +142,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const decreaseQuantity = (id) => {
     dispatch({
-      type: "DECEASE_QUANTITY",
+      type: "DECREASE_QUANTITY",
       payload: id,
     });
   };
@@ -152,7 +166,7 @@ export const GlobalContextProvider = ({ children }) => {
         IsLoggedIn,
         IsAdmin,
         AdminStatus: state.IsAdmin,
-        LoginStatus: state.IsLoggIn,
+        LoginStatus: state.IsLoggedIn,
         cart: state.cart,
         addToCart,
         updateCart,

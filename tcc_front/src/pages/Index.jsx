@@ -75,26 +75,10 @@ const Index = () => {
               </div>
             </section>
 
-            {/* Recommended Products */}
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold mb-6">Recommended for You</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                {recommendedProductImages.map((src, index) => (
-                  <div key={index + 8} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <img
-                      src={src}
-                      alt={`Product Image ${index + 9}`}
-                      className="w-full h-48 object-cover rounded mb-4"
-                    />
-                    <h3 className="text-xl font-bold">Product Name {index + 9}</h3>
-                    <p className="mt-2 text-gray-600">${99.99 - (index + 8) * 10}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+           
           </div>
 
-          {/* Recommended Products Sidebar */}
+          {/* Recommended barra do lado */}
           <div className="w-full lg:w-1/4">
             <section className="mb-12">
               <h2 className="text-3xl font-bold mb-6">Recommended for You</h2>
