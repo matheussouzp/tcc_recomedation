@@ -48,32 +48,32 @@ class UserController {
         }
     }
     
-    async auth(req, res) {    
-        const { email, password } = req.body;
-        
-        // Verificar se todos os campos estão presentes
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Preencha todos os campos' });
-        }
+   async auth(req, res) {
+    const { email, password } = req.body;
 
-        try {
-            const user = await userModel.findOne({ where: { email } });
-            
-            if (!user) {
-                return res.status(404).json({ error: 'Usuário não encontrado' });
-            }
-            
-            if (user.password !== password) {
-                return res.status(401).json({ error: 'Senha incorreta' });
-            }
-            
-            // Gerar um token aqui se necessário (pode ser com JWT)
-            res.status(200).json({ message: 'Login bem-sucedido' });
-        } catch (error) {
-            console.error('Erro ao autenticar usuário:', error);
-            res.status(500).json({ error: 'Erro ao autenticar usuário' });
-        }
+    // Verificar se todos os campos estão presentes
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Preencha todos os campos' });
     }
+
+    try {
+        const user = await userModel.findOne({ where: { email } });
+        
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+        
+        if (user.password !== password) {
+            return res.status(401).json({ error: 'Senha incorreta' });
+        }
+        // Retorne o nome e o email do usuário na resposta de sucesso
+        res.status(201).json(user);
+    } catch (error) {
+        console.error('Erro ao autenticar usuário:', error);
+        res.status(500).json({ error: 'Erro ao autenticar usuário' });
+    }
+}
+
 
     async list(req, res) {
         try {
@@ -99,6 +99,22 @@ class UserController {
             res.status(500).json({ error: 'Erro ao buscar usuário' });
         }
     }
+
+    async searchByEmail(req, res) {
+        const { email } = req.params; // Obtemos o e-mail dos parâmetros da requisição
+        try {
+            const user = await userModel.findOne({ where: { email } }); // Busca por e-mail
+            if (user) {
+                res.json(user); // Se o usuário for encontrado, retorna os dados
+            } else {
+                res.status(404).json({ error: 'Usuário não encontrado' }); // Se o usuário não for encontrado
+            }
+        } catch (error) {
+            console.error('Erro ao buscar usuário:', error);
+            res.status(500).json({ error: 'Erro ao buscar usuário' }); // Erro genérico
+        }
+    }
+    
 
     async update(req, res) {
         const id = req.params.id;

@@ -21,12 +21,11 @@ const Register = () => {
       });
 
       if (response.status === 201) {
-        // Define o estado global após o registro bem-sucedido
-        IsLoggedIn(true); // Marca como logado
-        setGlobalName(response.data.name); // Salva o nome globalmente
-        setGlobalEmail(response.data.email); // Salva o email globalmente
-        navigate("/"); // Redireciona para a página inicial ou qualquer outra rota protegida
-      }
+      IsLoggedIn(true); // Marca como logado
+      setGlobalName(response.data.name); // Salva o nome globalmente
+      setGlobalEmail(response.data.email); // Salva o email globalmente
+      navigate("/"); // Redireciona para a página inicial
+    }
     } catch (error) {
       console.error("Registration error:", error);
       setError("Erro no cadastro, tente novamente.");

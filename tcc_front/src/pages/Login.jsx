@@ -4,7 +4,7 @@ import axios from "axios";
 import { GlobalContext } from "../GlobalContext/GlobalContext"; // Importe o GlobalContext
 
 const Form = () => {
-  const { IsLoggedIn, setEmail } = useContext(GlobalContext); // Pegue as funções do GlobalContext
+  const { IsLoggedIn, setName: setGlobalName, setEmail: setGlobalEmail } = useContext(GlobalContext); // Pega os setters do contexto global
   const [email, setEmailInput] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,17 +14,15 @@ const Form = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3001/user/auth", {
-        email, // Passe o email corretamente
+        email,
         password,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Setar o estado de login no GlobalContext
         IsLoggedIn(true);
-        setEmail(email);
-        
-
-        // Redirecionar após o login
+        setGlobalName(response.data.name); // Salva o nome globalmente
+        setGlobalEmail(response.data.email); // Salva o email globalmente
         console.log("Login bem-sucedido", response.data);
         navigate("/"); // Ajuste conforme a rota da sua aplicação
       }
@@ -36,9 +34,7 @@ const Form = () => {
 
   return (
     <div className="bg-slate-900 min-h-screen w-full flex flex-col items-center justify-center">
-      <h1 className="font-bold text-[2rem] text-white">
-        Fazer login
-      </h1>
+      <h1 className="font-bold text-[2rem] text-white">Fazer login</h1>
       <div className="w-96 mt-4 bg-stone-400 px-4 py-5 rounded-lg">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <div className="flex flex-col">
