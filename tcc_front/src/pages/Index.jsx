@@ -1,5 +1,5 @@
 import React from "react";
-  
+
 const Index = () => {
   const featuredProductImages = [
     'https://th.bing.com/th/id/OIP.amWjDOa6Y7tK8MO9h1OXqgHaH6?rs=1&pid=ImgDetMain',
@@ -10,6 +10,11 @@ const Index = () => {
     'https://th.bing.com/th/id/OIP.-QQJODDzfyTP9vv_xqP1nAHaEc?pid=ImgDet&w=206&h=123&c=7&dpr=1,1',
     'https://th.bing.com/th/id/OIP.kkfJZdixnZ7E13yXOvKTBAHaDf?w=294&h=180&c=7&r=0&o=5&dpr=1.1&pid=1.7',
     'https://caras.uol.com.br/images/large/2021/08/23/beleza-8-produtos-que-fazem-muito-sucesso-na-amazon--990133.jpg',
+    // Adicionando mais uma fila de produtos
+    'https://example.com/image9.jpg',
+    'https://example.com/image10.jpg',
+    'https://example.com/image11.jpg',
+    'https://example.com/image12.jpg'
   ];
 
   const recommendedProductImages = [
@@ -39,7 +44,6 @@ const Index = () => {
       </head>
       <body className="bg-gray-100 font-sans leading-normal tracking-normal">
        
-
         {/* Banner */}
         <div
           className="bg-cover bg-center h-64"
@@ -74,8 +78,6 @@ const Index = () => {
                 ))}
               </div>
             </section>
-
-           
           </div>
 
           {/* Recommended barra do lado */}
