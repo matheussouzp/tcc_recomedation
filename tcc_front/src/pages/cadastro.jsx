@@ -7,12 +7,20 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmação de senha
   const [error, setError] = useState("");
-  const { IsLoggedIn, setName: setGlobalName, setEmail: setGlobalEmail } = useContext(GlobalContext); // Pega os setters do contexto global
+  const { IsLoggedIn, setName: setGlobalName, setEmail: setGlobalEmail } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Verifica se as senhas são iguais
+    if (password !== confirmPassword) {
+      setError("As senhas não são iguais.");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:3001/user", {
         name,
@@ -21,11 +29,11 @@ const Register = () => {
       });
 
       if (response.status === 201) {
-      IsLoggedIn(true); // Marca como logado
-      setGlobalName(response.data.name); // Salva o nome globalmente
-      setGlobalEmail(response.data.email); // Salva o email globalmente
-      navigate("/"); // Redireciona para a página inicial
-    }
+        IsLoggedIn(true);
+        setGlobalName(response.data.name);
+        setGlobalEmail(response.data.email);
+        navigate("/"); // Redireciona para a página inicial
+      }
     } catch (error) {
       console.error("Registration error:", error);
       setError("Erro no cadastro, tente novamente.");
@@ -65,6 +73,16 @@ const Register = () => {
               className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-sm" htmlFor="confirmPassword">Confirme a Senha</label>
+            <input
+              type="password"
+              placeholder="Confirme sua Senha"
+              className="rounded-lg py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 

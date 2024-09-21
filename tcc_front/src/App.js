@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/cadastro";
 import Index from "./pages/Index";
 import Cart from "./pages/Cart";
+import Product from "./pages/Product";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastrar" element={<Cadastro />} />
+        <Route path="/produto" element={<Product />} />
         {/* <Route path="/register" element={<Register />} />
         <Route path="/addnewproduct" element={<AddNewProduct />} />
         <Route path="/produto/detalhes/:productid" element={<ProductDetails />} />
