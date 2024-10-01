@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../db');
 
-const Produto = sequelize.define('Produto', {
+const Produto = sequelize.define('produtos_amazon', {
   url: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -37,6 +37,9 @@ const Produto = sequelize.define('Produto', {
     type: DataTypes.STRING,
   },
   scrapedAt: {
+    type: DataTypes.STRING,
+  },
+  imageSrc: {
     type: DataTypes.STRING,
   }
 });

@@ -8,8 +8,8 @@ const sequelize = require('./db.js'); // Certifique-se de que o caminho está co
 
 // Importando os modelos
 const User = require('./models/user'); 
-const Product = require('./models/product'); 
-const Produto = require('./models/produto'); 
+// const Product = require('./models/product'); 
+// const Produto = require('./models/produtos_amazon.js'); 
 const Payment = require('./models/payment'); 
 const Order = require('./models/order'); 
 const OrderItem = require('./models/orderitem'); 

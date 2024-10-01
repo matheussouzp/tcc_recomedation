@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../db.js');
 const Order = require('./order'); // Importando o modelo Order para a FK
-const Product = require('./product'); // Importando o modelo Product para a FK (assumindo que você tenha um modelo de Product)
+const Product = require('./produtos_amazon'); // Importando o modelo Product para a FK (assumindo que você tenha um modelo de Product)
 
 const OrderItem = database.define('orderItem', {
   id: {

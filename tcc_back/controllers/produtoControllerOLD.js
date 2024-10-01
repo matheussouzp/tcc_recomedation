@@ -1,4 +1,4 @@
-const Produto = require('../models/produtos_amazon');
+const { Produto } = require('../models/produtos_amazonOLD'); // Certifique-se de que o caminho está correto
 
 class ProdutoController {
     async create(req, res) {
