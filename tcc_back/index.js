@@ -6,17 +6,18 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const sequelize = require('./db.js'); // Certifique-se de que o caminho está correto
 
-// Importando o modelo User
+// Importando os modelos
 const User = require('./models/user'); 
 const Product = require('./models/product'); 
+const Produto = require('./models/produto'); 
 const Payment = require('./models/payment'); 
 const Order = require('./models/order'); 
 const OrderItem = require('./models/orderitem'); 
-const Category = require('./models/category'); 
+const Category = require('./models/category');
 
-
+// Importando as rotas
 var userRouter = require('./router/userRouter');
-
+var produtoRouter = require('./router/produtoRouter'); // Nova rota para produtos
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -28,6 +29,7 @@ app.use(
   })
 );
 
+// Rota para criação de usuário
 app.post('/create-user', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -39,9 +41,11 @@ app.post('/create-user', async (req, res) => {
   }
 });
 
+// Usando as rotas de usuário e produto
 app.use("/user", userRouter);
+app.use("/produto", produtoRouter); // Adicionando a rota para produtos
 
-
+// Autenticando e sincronizando com o banco de dados
 sequelize.authenticate()
   .then(() => {
     return sequelize.sync(); // Sincroniza os modelos com o banco de dados
