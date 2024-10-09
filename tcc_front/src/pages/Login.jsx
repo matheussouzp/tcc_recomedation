@@ -18,11 +18,12 @@ const Form = () => {
         password,
       });
 
-      if (response.status === 201) {
+      // Verifique o status correto (200) em vez de 201
+      if (response.status === 200) {
         // Setar o estado de login no GlobalContext
         IsLoggedIn(true);
-        setGlobalName(response.data.name); // Salva o nome globalmente
-        setGlobalEmail(response.data.email); // Salva o email globalmente
+        setGlobalName(response.data.user.name); // Corrigir para response.data.user.name
+        setGlobalEmail(response.data.user.email); // Corrigir para response.data.user.email
         console.log("Login bem-sucedido", response.data);
         navigate("/"); // Ajuste conforme a rota da sua aplicação
       }

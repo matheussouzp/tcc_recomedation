@@ -1,4 +1,8 @@
 const userModel = require('../models/user.js');
+const jwt = require('jsonwebtoken');
+
+// Defina a chave secreta do JWT, idealmente por variáveis de ambiente
+const JWT_SECRET = process.env.JWT_SECRET || 'minha_chave_secreta';
 
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -66,8 +70,23 @@ class UserController {
         if (user.password !== password) {
             return res.status(401).json({ error: 'Senha incorreta' });
         }
-        // Retorne o nome e o email do usuário na resposta de sucesso
-        res.status(201).json(user);
+
+        const token = jwt.sign(
+            { id: user.id, name: user.name, email: user.email }, // Dados a serem incluídos no token
+            JWT_SECRET, // Chave secreta
+            { expiresIn: '1h' } // Expiração do token
+        );
+
+        res.status(200).json({
+            message: 'Autenticação bem-sucedida',
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
+        });
+
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error);
         res.status(500).json({ error: 'Erro ao autenticar usuário' });

@@ -5,24 +5,26 @@ import React, { useContext, useState } from "react";
 import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Início', href: 'index', current: false },
-  { name: 'Carrinho', href: 'Cart', current: false },
+  { name: 'Início', href: 'http://localhost:3000/', current: false },
+  { name: 'Carrinho', href: 'http://localhost:3000/cart', current: false },
   { name: 'Pedidos', href: '#', current: false },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
+
 const Header = () => {
-  const { IsLoggedIn, name, setLoginStatus, setEmail, setName } = useContext(GlobalContext); // Adiciona setLoginStatus
+  const { IsLoggedIn, email, name, setLoginStatus, setEmail, setName } = useContext(GlobalContext); // Usando name do JWT
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {
-    IsLoggedIn(false); // Desloga o usuário (corrigido para setLoginStatus)
+    setLoginStatus(false); // Desloga o usuário
     setName(''); // Limpa o nome do usuário
     setEmail(''); // Limpa o email do usuário
     window.location.reload(); // Recarrega a página
   };
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -37,12 +39,14 @@ const Header = () => {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-between">
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
+            <div className="flex flex-shrink-0 items-center" >
+              <Link to="/">  {/* Link para a página inicial */}
+                <img
+                  alt="Your Company"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgHktVlAOqib6_DPMQ9yoDiCyQvwE_Iw6byA&s"
+                  className="h-8 w-auto"
+                />
+              </Link>
             </div>
             <div className="hidden sm:block flex-1">
               <div className="flex justify-center">
@@ -74,16 +78,6 @@ const Header = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            {/* <button
-              type="button"
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="h-6 w-6" />
-            </button> */}
-
-            {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
               <div>
                 <MenuButton className="relative flex items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -96,7 +90,6 @@ const Header = () => {
                   />
                   {name && <span className="text-white ml-2">{name}</span>} {/* Exibe o nome se existir */}
                 </MenuButton>
-
               </div>
               <MenuItems
                 transition
@@ -140,7 +133,6 @@ const Header = () => {
                 )}
               </MenuItems>
             </Menu>
-
           </div>
         </div>
       </div>
@@ -165,8 +157,6 @@ const Header = () => {
       </DisclosurePanel>
     </Disclosure>
   );
-
 };
+
 export default Header;
-
-
