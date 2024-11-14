@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+/* styles.css ou Product.css */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: auto;
+  position: fixed; /* Adicione isto */
+  top: 50%; /* Adicione isto */
+  left: 50%; /* Adicione isto */
+  transform: translate(-50%, -50%); /* Adicione isto */
+  z-index: 1000; /* Adicione isto */
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.75);
+  position: fixed; /* Adicione isto */
+  top: 0; /* Adicione isto */
+  left: 0; /* Adicione isto */
+  right: 0; /* Adicione isto */
+  bottom: 0; /* Adicione isto */
+  z-index: 999; /* Adicione isto */
+}

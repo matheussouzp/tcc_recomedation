@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CartContext } from '../context/CartContext';
+import { GlobalContext } from '../GlobalContext/GlobalContext';
 
 const Product = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const { addToCart } = useContext(CartContext);
+    const { codigo } = useContext(GlobalContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Fetching product with ID:", id); // Log do ID do produto
+        console.log("Fetching product with ID:", id);
         axios.get(`http://localhost:3001/produto/${id}`)
             .then((response) => {
-                console.log("Produto obtido:", response.data); // Log do produto obtido
                 setProduct(response.data);
                 setLoading(false);
             })
@@ -27,14 +26,26 @@ const Product = () => {
     }, [id]);
 
     const handleAddToCart = () => {
-        console.log("Adicionando ao carrinho:", product); // Log para depuração
-        if (product) {
-            addToCart(product);
-            console.log("Produto adicionado ao carrinho:", product); // Log após adicionar ao carrinho
+        console.log("Adicionando ao carrinho:", product);
+        // Verifique se o produto e o código do usuário estão definidos e se o código é uma string não vazia
+        if (product && codigo) {
+            axios.post('http://localhost:3001/cart/add', {
+                userId: codigo,
+                productId: product.id,
+                quantity: 1
+            })
+            .then((response) => {
+                console.log("Produto adicionado ao carrinho com sucesso:", response.data);
+            })
+            .catch((error) => {
+                console.error("Erro ao adicionar ao carrinho:", error);
+            });
         } else {
-            console.error("Produto não encontrado ao tentar adicionar ao carrinho.");
+            console.log("Usuário não autenticado, redirecionando para login");
+            navigate('/login'); 
         }
     };
+    
 
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
@@ -47,7 +58,7 @@ const Product = () => {
                     <div className="img">
                         <div className="img-box h-full max-lg:mx-auto">
                             <img
-                                src={product.imageUrl} // Use a propriedade correta
+                                src={product.imageSrc}
                                 alt={product.name}
                                 className="max-lg:mx-auto lg:ml-auto h-full object-cover"
                             />
@@ -64,7 +75,7 @@ const Product = () => {
                                 </h6>
                                 <div className="flex items-center gap-2">
                                     <span className="pl-2 font-normal leading-7 text-gray-500 text-sm">
-                                        {`${product.five_star}% avaliação de 5 estrelas`}
+                                        {`${product.five_star} avaliação de 5 estrelas`}
                                     </span>
                                 </div>
                             </div>

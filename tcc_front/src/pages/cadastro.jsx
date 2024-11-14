@@ -9,7 +9,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmação de senha
   const [error, setError] = useState("");
-  const { IsLoggedIn, setName: setGlobalName, setEmail: setGlobalEmail } = useContext(GlobalContext);
+  const {setName: setGlobalName, setEmail: setGlobalEmail, setCodigo: setGlobalCodigo } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -29,13 +29,19 @@ const Register = () => {
       });
 
       if (response.status === 201) {
-        IsLoggedIn(true);
-        setGlobalName(response.data.name);
-        setGlobalEmail(response.data.email);
+        // Armazena as informações no localStorage
+        localStorage.setItem('email', response.data.user.email);
+        localStorage.setItem('name', response.data.user.name);
+        localStorage.setItem('codigo', response.data.user.id); // Armazenar ID se necessário
+
+        // Logar usuário após cadastro
+        setGlobalCodigo(response.data.user.id);
+        setGlobalName(response.data.user.name);
+        setGlobalEmail(response.data.user.email);
         navigate("/"); // Redireciona para a página inicial
       }
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Erro no cadastro:", error);
       setError("Erro no cadastro, tente novamente.");
     }
   };

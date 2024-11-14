@@ -22,14 +22,14 @@ const Order = database.define('order', {
       model: User,
       key: 'id'
     }
-  },
-  payment_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: Payment,
-      key: 'id'
-    }
+  // },
+  // payment_id: {
+  //   type: Sequelize.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //     model: Payment,
+  //     key: 'id'
+  //   }
   }
 });
 

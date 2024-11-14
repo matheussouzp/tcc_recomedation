@@ -5,22 +5,20 @@ import App from './App';
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import { GlobalContextProvider } from "./GlobalContext/GlobalContext";
-
-
-import Index from './pages/Index';
-import Cart from './pages/Cart';
+import { AuthProvider } from "./GlobalContext/AuthContext"; // Importa o AuthProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <GlobalContextProvider>        
-        <App />
+      <GlobalContextProvider>
+        <AuthProvider> {/* Envolva o App com AuthProvider */}
+          <App />
+        </AuthProvider>
       </GlobalContextProvider>
     </BrowserRouter>
-</React.StrictMode>
+  </React.StrictMode>
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

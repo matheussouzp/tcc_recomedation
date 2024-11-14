@@ -12,15 +12,17 @@ const User = require('./models/user');
 // const Produto = require('./models/produtos_amazon.js'); 
 const Payment = require('./models/payment'); 
 const Order = require('./models/order'); 
-const OrderItem = require('./models/orderitem'); 
 const Category = require('./models/category');
 
 // Importando as rotas
 var userRouter = require('./router/userRouter');
+var orderRouter = require('./router/userRouter');
 var produtoRouter = require('./router/produtoRouter'); // Nova rota para produtos
+const cartRouter = require('./router/cartRouter');
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(express.json());
 
 app.use(
   cors({
@@ -44,7 +46,7 @@ app.post('/create-user', async (req, res) => {
 // Usando as rotas de usuário e produto
 app.use("/user", userRouter);
 app.use("/produto", produtoRouter); // Adicionando a rota para produtos
-
+app.use('/cart', cartRouter);
 // Autenticando e sincronizando com o banco de dados
 sequelize.authenticate()
   .then(() => {

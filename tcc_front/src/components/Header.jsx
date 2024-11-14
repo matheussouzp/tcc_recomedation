@@ -1,13 +1,13 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { GlobalContext } from "../GlobalContext/GlobalContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
 const navigation = [
   { name: 'Início', href: 'http://localhost:3000/', current: false },
   { name: 'Carrinho', href: 'http://localhost:3000/cart', current: false },
-  { name: 'Pedidos', href: '#', current: false },
+  { name: 'Pedidos', href: 'http://localhost:3000/orders', current: false },
 ];
 
 function classNames(...classes) {
@@ -15,13 +15,27 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const { IsLoggedIn, email, name, setLoginStatus, setEmail, setName } = useContext(GlobalContext); // Usando name do JWT
   const [showDropdown, setShowDropdown] = useState(false);
+  const { email, name, setEmail, setName, setCodigo } = useContext(GlobalContext);
+
+  // Recupera o estado de login ao montar o componente
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    const storedName = localStorage.getItem('name');
+    const storedCodigo = localStorage.getItem('codigo');
+    
+    if (storedEmail && storedName) {
+      setEmail(storedEmail);
+      setName(storedName);
+      setCodigo(storedCodigo);
+    }
+  }, [setEmail, setName]);
 
   const handleLogout = () => {
-    setLoginStatus(false); // Desloga o usuário
     setName(''); // Limpa o nome do usuário
     setEmail(''); // Limpa o email do usuário
+    localStorage.removeItem('email'); // Remove o email do localStorage
+    localStorage.removeItem('name'); // Remove o nome do localStorage
     window.location.reload(); // Recarrega a página
   };
 
@@ -30,7 +44,6 @@ const Header = () => {
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
@@ -40,7 +53,7 @@ const Header = () => {
           </div>
           <div className="flex flex-1 items-center justify-between">
             <div className="flex flex-shrink-0 items-center" >
-              <Link to="/">  {/* Link para a página inicial */}
+              <Link to="/">  
                 <img
                   alt="Your Company"
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgHktVlAOqib6_DPMQ9yoDiCyQvwE_Iw6byA&s"
@@ -95,7 +108,7 @@ const Header = () => {
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
-                {name ? ( // Valida se o nome existe
+                {name ? ( 
                   <>
                     <MenuItem>
                       <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
@@ -115,17 +128,16 @@ const Header = () => {
                         Sair
                       </button>
                     </MenuItem>
-
                   </>
                 ) : (
                   <>
                     <MenuItem>
-                      <a href="cadastrar" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                      <a href="http://localhost:3000/cadastrar" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                         Cadastrar
                       </a>
                     </MenuItem>
                     <MenuItem>
-                      <a href="login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                      <a href="http://localhost:3000/login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                         Login
                       </a>
                     </MenuItem>

@@ -43,8 +43,9 @@ const Produto = database.define('produto', {
     type: Sequelize.STRING,
   }
 }, {
-  tableName: 'produtos_amazon', // Nome da tabela no banco de dados
-  timestamps: false // Desabilitar colunas createdAt e updatedAt
+  tableName: 'produtos_amazon',
+  timestamps: false
 });
 
+// Exportar Produto sem definir associações aqui
 module.exports = Produto;
