@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [products, setProducts] = useState([]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
   const navigate = useNavigate();
 
   // Carregar produtos da API
@@ -13,24 +14,28 @@ const Index = () => {
       method: "get",
     })
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data); // Carregar produtos sequencialmente do BD
+        // Chama a função para obter produtos recomendados de forma aleatória
+        getRandomRecommendedProducts(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  // Imagens de exemplo (ajustar conforme necessário)
-  const sidebarProductImages = [
-    'https://th.bing.com/th/id/OIP.mymAuo3f-UQqIpz8JwFXQQHaEE?w=645&h=355&rs=1&pid=ImgDetMain',
-    'https://phonetechx.com/wp-content/uploads/2023/08/Honor-Watch-6-1.jpg',
-    'https://th.bing.com/th/id/OIP.mV0SniFRHM3MPRabJgiwuwAAAA?rs=1&pid=ImgDetMain',
-    'https://th.bing.com/th/id/OIP.L0rR3yghe3olTYv4Na1eHwHaHa?pid=ImgDet&w=206&h=206&c=7&dpr=1,1',
-  ];
+  // Função para obter dois produtos aleatórios que não estão em destaque
+  const getRandomRecommendedProducts = (productsList) => {
+    if (productsList.length > 0) {
+      // Embaralhar a lista de produtos
+      const shuffled = [...productsList].sort(() => 0.5 - Math.random());
+      // Selecionar os dois primeiros produtos de forma aleatória
+      const selected = shuffled.slice(0, 2);
+      setRecommendedProducts(selected);
+    }
+  };
 
   return (
     <div className="bg-gray-100 font-sans leading-normal tracking-normal">
-
       {/* Banner */}
       <div
         className="bg-cover bg-center h-64"
@@ -38,8 +43,8 @@ const Index = () => {
       >
         <div className="container mx-auto h-full flex items-center justify-center">
           <div className="text-center bg-white bg-opacity-75 p-6 rounded-lg shadow-lg">
-            <h1 className="text-4xl font-bold">Welcome to Our Store</h1>
-            <p className="mt-2 text-lg">Find the best products at the best prices</p>
+            <h1 className="text-4xl font-bold">Bem vindo a Nossa Loja!</h1>
+            <p className="mt-2 text-lg">Os melhores preços estão aqui!</p>
           </div>
         </div>
       </div>
@@ -88,17 +93,17 @@ const Index = () => {
         {/* Recommended barra lateral */}
         <div className="w-full lg:w-1/4">
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-6">Recommended for You</h2>
+            <h2 className="text-3xl font-bold mb-6">Recomendados</h2>
             <div className="space-y-8">
-              {sidebarProductImages.map((src, index) => (
+              {recommendedProducts.map((product, index) => (
                 <div key={index} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                   <img
-                    src={src}
+                    src={product.imageSrc}
                     alt={`Product Image ${index + 1}`}
                     className="w-full h-32 object-cover rounded mb-4"
                   />
-                  <h3 className="text-xl font-bold">Product Name {index + 1}</h3>
-                  <p className="mt-2 text-gray-600">${99.99 - (index * 10)}</p>
+                  <h3 className="text-xl font-bold">{product.name}</h3>
+                  <p className="mt-2 text-gray-600">{product.price}</p>
                 </div>
               ))}
             </div>
