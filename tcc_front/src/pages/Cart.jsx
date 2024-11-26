@@ -109,7 +109,7 @@ const Cart = () => {
                                         <div key={index} className="flex items-center border-b border-gray-200 py-4">
                                             <img
                                                 src={product.produto.imageSrc}
-                                                alt={`Product Image ${index + 1}`}
+                                                alt={`Imagem do Produto ${index + 1}`}
                                                 className="w-20 h-20 object-cover rounded"
                                             />
                                             <div className="ml-4 flex-grow">
@@ -155,15 +155,15 @@ const Cart = () => {
                                 <h2 className="text-2xl font-bold mb-4">Resumo do Pedido</h2>
                                 <div className="flex justify-between border-b border-gray-200 py-2">
                                     <span>Subtotal</span>
-                                    <span>${subtotal}</span>
+                                    <span>R$ {subtotal}</span>
                                 </div>
                                 <div className="flex justify-between border-b border-gray-200 py-2">
                                     <span>Imposto</span>
-                                    <span>${(subtotal * 0.08).toFixed(2)}</span>
+                                    <span>R$ {(subtotal * 0.08).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between font-bold text-xl py-2">
                                     <span>Total</span>
-                                    <span>${(subtotal * 1.08).toFixed(2)}</span>
+                                    <span>R$ {(subtotal * 1.08).toFixed(2)}</span>
                                 </div>
                                 <button
                                     className="mt-6 w-full bg-yellow-500 text-white p-4 rounded-lg hover:bg-yellow-600 transition-colors"

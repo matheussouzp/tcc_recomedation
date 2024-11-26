@@ -4,7 +4,7 @@ import axios from "axios";
 import { GlobalContext } from "../GlobalContext/GlobalContext"; // Importe o GlobalContext
 
 const Form = () => {
-  const {setName: setGlobalName, setEmail: setGlobalEmail, setCodigo: setGlobalCodigo } = useContext(GlobalContext); // Pega os setters do contexto global
+  const { setName: setGlobalName, setEmail: setGlobalEmail, setCodigo: setGlobalCodigo } = useContext(GlobalContext); // Pega os setters do contexto global
   const [email, setEmailInput] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -73,7 +73,7 @@ const Form = () => {
         </form>
       </div>
       <p className="text-slate-100 text-xs w-96 mt-2 text-center">
-        Não possui cadastro? <Link to="/cadastrar" className="text-blue-500 hover:underline">Cadastra-se clicando aqui!</Link>
+        Não possui cadastro? <Link to="/cadastrar" className="text-blue-500 hover:underline">Cadastre-se clicando aqui!</Link>
       </p>
     </div>
   );

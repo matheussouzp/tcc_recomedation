@@ -46,23 +46,23 @@ const Orders = () => {
                   htmlFor="order-type"
                   className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Select order type
+                  Selecione o tipo de pedido
                 </label>
                 <select
                   id="order-type"
                   className="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                 >
-                  <option selected>All orders</option>
-                  <option value="pre-order">Pre-order</option>
-                  <option value="transit">In transit</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option selected>Todos os pedidos</option>
+                  <option value="pre-order">Pré-encomenda</option>
+                  <option value="transit">Em trânsito</option>
+                  <option value="confirmed">Confirmado</option>
+                  <option value="cancelled">Cancelado</option>
                 </select>
               </div>
 
               <span className="inline-block text-gray-500 dark:text-gray-400">
                 {" "}
-                from{" "}
+                de{" "}
               </span>
 
               <div>
@@ -70,17 +70,17 @@ const Orders = () => {
                   htmlFor="duration"
                   className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Select duration
+                  Selecione a duração
                 </label>
                 <select
                   id="duration"
                   className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                 >
-                  <option selected>this week</option>
-                  <option value="this month">this month</option>
-                  <option value="last 3 months">the last 3 months</option>
-                  <option value="last 6 months">the last 6 months</option>
-                  <option value="this year">this year</option>
+                  <option selected>esta semana</option>
+                  <option value="this month">este mês</option>
+                  <option value="last 3 months">últimos 3 meses</option>
+                  <option value="last 6 months">últimos 6 meses</option>
+                  <option value="this year">este ano</option>
                 </select>
               </div>
             </div>
@@ -96,7 +96,7 @@ const Orders = () => {
                   >
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500 dark:text-gray-400">
-                        Order ID:
+                        ID do pedido:
                       </dt>
                       <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                         <a href="#" className="hover:underline">
@@ -107,7 +107,7 @@ const Orders = () => {
 
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500 dark:text-gray-400">
-                        Date:
+                        Data:
                       </dt>
                       <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                         {order.date}
@@ -116,7 +116,7 @@ const Orders = () => {
 
                     <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt className="text-base font-medium text-gray-500 dark:text-gray-400">
-                        Price:
+                        Preço:
                       </dt>
                       <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                         {order.price}

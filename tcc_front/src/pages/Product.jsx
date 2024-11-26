@@ -12,7 +12,7 @@ const Product = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Fetching product with ID:", id);
+        console.log("Buscando produto com ID:", id);
         axios.get(`http://localhost:3001/produto/${id}`)
             .then((response) => {
                 setProduct(response.data);
@@ -27,7 +27,6 @@ const Product = () => {
 
     const handleAddToCart = () => {
         console.log("Adicionando ao carrinho:", product);
-        // Verifique se o produto e o código do usuário estão definidos e se o código é uma string não vazia
         if (product && codigo) {
             axios.post('http://localhost:3001/cart/add', {
                 userId: codigo,
@@ -46,7 +45,6 @@ const Product = () => {
         }
     };
     
-
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
     if (!product) return <p>Produto não encontrado!</p>;

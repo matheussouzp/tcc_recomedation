@@ -5,7 +5,7 @@ import './galery_style.css';
 export class Galery extends Component {
   render() {
     return (
-      <div className='container'>Galery</div>
+      <div className='container'>Galeria</div>
     )
   }
 }
