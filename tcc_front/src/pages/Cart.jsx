@@ -75,20 +75,75 @@ const Cart = () => {
         return acc + price * product.quantity; // Calcule o subtotal
     }, 0).toFixed(2); // Formate para duas casas decimais
 
+    // const handleCheckout = async () => {
+    //     try {
+    //         const response = await axios.post('http://localhost:3001/cart/checkout', {
+    //             userId: codigo // Supondo que 'codigo' seja o ID do usuário logado
+    //         });
+    //         alert('Compra finalizada com sucesso!');
+    //         // Aqui você pode redirecionar o usuário ou atualizar o estado do carrinho
+    //         setCart([]); // Limpa o carrinho no frontend
+    //         navigate("/");
+    //     } catch (error) {
+    //         console.error("Erro ao finalizar a compra:", error);
+    //         alert('Erro ao finalizar a compra.');
+    //     }
+    // };
+
     const handleCheckout = async () => {
+        if (cart.length === 0) {
+            alert("O carrinho está vazio.");
+            return;
+        }
+    
         try {
-            const response = await axios.post('http://localhost:3001/cart/checkout', {
-                userId: codigo // Supondo que 'codigo' seja o ID do usuário logado
+            // Itera sobre os itens do carrinho e registra cada compra
+            const promises = cart.map((product) => {
+                // const payload = {
+                //     event_time: currentTime,
+                //     event_type: "purchase",
+                //     product_id: product.produto.id,
+                //     category_id: product.produto.category_id,
+                //     category_code: product.produto.category_code || "",
+                //     brand: product.produto.brand,
+                //     price: product.produto.price,
+                //     user_id: codigo, // ID do usuário logado
+                //     user_session: userSession, // Sessão do usuário
+                //     titulo: product.produto.name,
+                //     descricao: product.produto.descricao || ".", // Valor padrão caso esteja vazio
+                //     imagesrc: product.produto.imageSrc,
+                // };
+    
+                // // Fazer a chamada POST para cada produto
+                // axios.post(
+                //     "http://localhost:3001/produtoRecomendador/produtos/interacao",
+                //     payload
+                // );
+
+                return axios.post('http://localhost:3001/cart/checkout', {
+                    userId: codigo,
+                    productId: product.produto.id, // ID do produto
+                    quantity: product.quantity, // Quantidade do produto
+                    eventType: "purchase", // Define o tipo de evento
+                });
+
+                
             });
+
+           
+    
+            // Aguarda a execução de todas as requisições
+            await Promise.all(promises);
+    
             alert('Compra finalizada com sucesso!');
-            // Aqui você pode redirecionar o usuário ou atualizar o estado do carrinho
             setCart([]); // Limpa o carrinho no frontend
-            navigate("/");
+            navigate('/'); // Redireciona o usuário após o checkout
         } catch (error) {
             console.error("Erro ao finalizar a compra:", error);
             alert('Erro ao finalizar a compra.');
         }
     };
+    
 
     return (
         <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">

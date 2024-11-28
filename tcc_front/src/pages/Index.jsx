@@ -7,39 +7,43 @@ const Index = () => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const navigate = useNavigate();
 
-  // Carregar produtos da API
+  // Carregar produtos em destaque da API
   useEffect(() => {
     axios({
       url: "http://localhost:3001/produto/",
       method: "get",
     })
       .then((res) => {
-        setProducts(res.data); // Carregar produtos sequencialmente do BD
-        // Chama a função para obter produtos recomendados de forma aleatória
-        getRandomRecommendedProducts(res.data);
+        setProducts(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  // Função para obter dois produtos aleatórios que não estão em destaque
-  const getRandomRecommendedProducts = (productsList) => {
-    if (productsList.length > 0) {
-      // Embaralhar a lista de produtos
-      const shuffled = [...productsList].sort(() => 0.5 - Math.random());
-      // Selecionar os dois primeiros produtos de forma aleatória
-      const selected = shuffled.slice(0, 2);
-      setRecommendedProducts(selected);
-    }
-  };
+  // Carregar produtos recomendados da API
+  useEffect(() => {
+    axios({
+      url: "http://localhost:3001/produto/",
+      method: "get",
+    })
+      .then((res) => {
+        // Limitar os produtos recomendados a 5
+        setRecommendedProducts(res.data.slice(0, 5)); // Pega os 5 primeiros produtos
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="bg-gray-100 font-sans leading-normal tracking-normal">
       {/* Banner */}
       <div
         className="bg-cover bg-center h-64"
-        style={{ backgroundImage: "url('https://onepatch.com/wp-content/uploads/2020/11/shopify-order-1.jpg')" }}
+        style={{
+          backgroundImage: "url('https://onepatch.com/wp-content/uploads/2020/11/shopify-order-1.jpg')",
+        }}
       >
         <div className="container mx-auto h-full flex items-center justify-center">
           <div className="text-center bg-white bg-opacity-75 p-6 rounded-lg shadow-lg">
@@ -63,7 +67,7 @@ const Index = () => {
                     <div
                       key={product.id}
                       className="group relative cursor-pointer"
-                      onClick={() => navigate(`/produtos/${product.id}`)} // Navegação para a página de detalhes
+                      onClick={() => navigate(`/produtos/${product.id}`)}
                     >
                       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                         <img
@@ -90,13 +94,17 @@ const Index = () => {
           </section>
         </div>
 
-        {/* Recommended barra lateral */}
+        {/* Recommended Sidebar */}
         <div className="w-full lg:w-1/4">
           <section className="mb-12">
             <h2 className="text-3xl font-bold mb-6">Recomendados</h2>
             <div className="space-y-8">
               {recommendedProducts.map((product, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                  onClick={() => navigate(`/produtos/${product.id}`)} // Navegar para a página de detalhes
+                >
                   <img
                     src={product.imageSrc}
                     alt={`Product Image ${index + 1}`}

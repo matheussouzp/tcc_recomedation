@@ -1,10 +1,10 @@
-const Sequelize = require('sequelize');
+const Sequelize = require('sequelize'); 
 const database = require('../db.js');
 
 const Produto = database.define('produto', {
   event_time: {
     type: Sequelize.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   event_type: {
     type: Sequelize.STRING,
@@ -12,7 +12,7 @@ const Produto = database.define('produto', {
   },
   product_id: {
     type: Sequelize.BIGINT,
-    allowNull: true,
+    allowNull: false,
   },
   category_id: {
     type: Sequelize.BIGINT,
@@ -32,7 +32,8 @@ const Produto = database.define('produto', {
   },
   user_id: {
     type: Sequelize.BIGINT,
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true, // Definindo como parte da chave primária
   },
   user_session: {
     type: Sequelize.STRING,
@@ -51,9 +52,8 @@ const Produto = database.define('produto', {
     allowNull: true,
   },
 }, {
-  tableName: 'produtos_amazon',  // ou o nome da tabela que você está usando
-  timestamps: false,  // Se você não estiver usando campos de data automáticos
+  tableName: 'produtos',
+  timestamps: true, // Se você quiser manter createdAt e updatedAt
 });
 
-// Exportar Produto sem definir associações aqui
 module.exports = Produto;
