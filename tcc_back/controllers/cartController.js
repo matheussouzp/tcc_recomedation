@@ -1,6 +1,6 @@
 const CartItem = require('../models/cartItem');
 const Order = require('../models/order');
-const Product = require('../models/produtos_amazon');
+const Product = require('../models/produto');
 const OrderItem = require('../models/OrderItem');
 
 // Adiciona item ao carrinho

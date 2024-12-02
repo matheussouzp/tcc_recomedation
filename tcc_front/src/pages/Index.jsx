@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { GlobalContext } from "../GlobalContext/GlobalContext"; 
 
 const Index = () => {
   const [products, setProducts] = useState([]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const navigate = useNavigate();
+  const { codigo } = useContext(GlobalContext);
+  const { token } = useContext(GlobalContext);
 
   // Carregar produtos em destaque da API
   useEffect(() => {
     axios({
-      url: "http://localhost:3001/produto/",
+      url: "http://localhost:3001/produtoRecomendador/produtos/unicos",
       method: "get",
     })
       .then((res) => {
@@ -24,7 +28,7 @@ const Index = () => {
   // Carregar produtos recomendados da API
   useEffect(() => {
     axios({
-      url: "http://localhost:3001/produto/",
+      url: "http://localhost:3001/produtoRecomendador/produtos/unicos",
       method: "get",
     })
       .then((res) => {
@@ -35,6 +39,38 @@ const Index = () => {
         console.log(error);
       });
   }, []);
+
+  const handleProductClick = (product) => {
+    console.log("user global context:", codigo);
+  
+    const currentTime = new Date().toISOString().replace("T", " ").split(".")[0] + " UTC";
+    const payload = {
+      event_time: currentTime,
+      event_type: "view",
+      product_id: product.product_id,
+      category_id: product.category_id,
+      category_code: product.category_code || "",
+      brand: product.brand,
+      price: product.price,
+      user_id: codigo, // ID do usuário logado
+      user_session: token, // JWT do usuário logado
+      title: product.title,
+      description: product.description || ".",
+      image: product.image,
+    };
+  
+    console.log("Payload enviado:", payload);
+
+    axios
+      .post("http://localhost:3001/produtoRecomendador/produtos/interacao", payload)
+      .then(() => {
+        navigate(`/produtos/${product.id}`);
+      })
+      .catch((error) => {
+        console.error("Erro ao registrar interação:", product.product_id);
+      });
+  };
+  
 
   return (
     <div className="bg-gray-100 font-sans leading-normal tracking-normal">
@@ -63,16 +99,16 @@ const Index = () => {
             <div className="bg-white">
               <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                  {products.map((product) => (
+                  {products.map((product, index) => (
                     <div
-                      key={product.id}
-                      className="group relative cursor-pointer"
-                      onClick={() => navigate(`/produtos/${product.id}`)}
-                    >
+                    key={index}
+                    className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    onClick={() => handleProductClick(product)} // Usar a função ao clicar
+                  >
                       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                         <img
                           alt={product.name}
-                          src={product.imageSrc}
+                          src={product.image}
                           className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                         />
                       </div>
@@ -82,9 +118,9 @@ const Index = () => {
                             <span aria-hidden="true" className="absolute inset-0" />
                             {product.name}
                           </h3>
-                          <p className="mt-1 text-sm text-gray-500">{product.brand}</p>
+                          <p className="mt-1 text-sm text-gray-500">{product.title}</p>
                         </div>
-                        <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                        <p className="text-sm font-medium text-gray-900">R${product.price}</p>
                       </div>
                     </div>
                   ))}
@@ -103,15 +139,15 @@ const Index = () => {
                 <div
                   key={index}
                   className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-                  onClick={() => navigate(`/produtos/${product.id}`)} // Navegar para a página de detalhes
+                  onClick={() => handleProductClick(product)} // Usar a função ao clicar
                 >
                   <img
-                    src={product.imageSrc}
+                    src={product.image}
                     alt={`Product Image ${index + 1}`}
                     className="w-full h-32 object-cover rounded mb-4"
                   />
-                  <h3 className="text-xl font-bold">{product.name}</h3>
-                  <p className="mt-2 text-gray-600">{product.price}</p>
+                  <h3 className="text-xl font-bold">{product.title}</h3>
+                  <p className="mt-2 text-gray-600">R${product.price}</p>
                 </div>
               ))}
             </div>

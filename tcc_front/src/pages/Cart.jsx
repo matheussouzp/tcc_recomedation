@@ -70,10 +70,10 @@ const Cart = () => {
     };
 
     const subtotal = cart.reduce((acc, product) => {
-        const priceString = product.produto.price || '0'; // Acesse o preço corretamente
-        const price = parseFloat(priceString.replace('$', '').replace(',', '')) || 0; // Remover '$' e ',' do preço
-        return acc + price * product.quantity; // Calcule o subtotal
-    }, 0).toFixed(2); // Formate para duas casas decimais
+        const price = product.produto.price || 0; // Garante que o preço tenha um valor padrão de 0
+        return acc + price * product.quantity; // Multiplica o preço pela quantidade
+    }, 0).toFixed(2); // Formata o resultado para duas casas decimais
+    
 
     // const handleCheckout = async () => {
     //     try {
@@ -163,12 +163,12 @@ const Cart = () => {
                                     cart.map((product, index) => (
                                         <div key={index} className="flex items-center border-b border-gray-200 py-4">
                                             <img
-                                                src={product.produto.imageSrc}
+                                                src={product.produto.image}
                                                 alt={`Imagem do Produto ${index + 1}`}
                                                 className="w-20 h-20 object-cover rounded"
                                             />
                                             <div className="ml-4 flex-grow">
-                                                <h3 className="text-xl font-bold">{product.produto.name}</h3>
+                                                <h3 className="text-xl font-bold">{product.produto.title}</h3>
                                                 <p className="text-gray-600">{product.produto.price}</p>
                                             </div>
                                             <div className="flex items-center space-x-4">

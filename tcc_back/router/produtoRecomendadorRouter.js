@@ -6,5 +6,9 @@ const produtoController = require('../controllers/produtoInteractionController')
 router.post('/produtos/interacao', produtoController.createInteraction);
 // Rota para listar produtos com product_id distinto
 router.get('/produtos/unicos', produtoController.findDistinctProducts);
+router.get('/produtos/:id', produtoController.searchById);
+router.get('/produtos/produtosRecomendados/:id', produtoController.searchById2);
+
+
 
 module.exports = router;

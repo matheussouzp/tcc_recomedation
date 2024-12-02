@@ -2,6 +2,12 @@ const Sequelize = require('sequelize');
 const database = require('../db.js');
 
 const Produto = database.define('produto', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true, // Define como chave primária
+  },
   event_time: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -33,27 +39,26 @@ const Produto = database.define('produto', {
   user_id: {
     type: Sequelize.BIGINT,
     allowNull: false,
-    primaryKey: true, // Definindo como parte da chave primária
   },
   user_session: {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  titulo: {
+  title: {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  descricao: {
+  description: {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  imagesrc: {
+  image: {
     type: Sequelize.STRING,
     allowNull: true,
   },
 }, {
   tableName: 'produtos',
-  timestamps: true, // Se você quiser manter createdAt e updatedAt
+  timestamps: false, // Mantém createdAt e updatedAt automáticos
 });
 
 module.exports = Produto;

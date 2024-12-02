@@ -31,6 +31,10 @@ const CartItem = database.define('cartItem', {
     allowNull: false,
     defaultValue: 1,
   },
+  image: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 });
 
 // Definindo a associação após a definição do modelo

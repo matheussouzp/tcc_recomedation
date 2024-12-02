@@ -4,7 +4,7 @@ import axios from "axios";
 import { GlobalContext } from "../GlobalContext/GlobalContext"; // Importe o GlobalContext
 
 const Form = () => {
-  const { setName: setGlobalName, setEmail: setGlobalEmail, setCodigo: setGlobalCodigo } = useContext(GlobalContext); // Pega os setters do contexto global
+  const { setName: setGlobalName, setEmail: setGlobalEmail, setCodigo: setGlobalCodigo, setIsLoggedIn, setToken: setGlobalToken } = useContext(GlobalContext); // Pega os setters do contexto global
   const [email, setEmailInput] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,12 +23,16 @@ const Form = () => {
         // Setar o estado de login no GlobalContext
         setGlobalCodigo(response.data.user.id);
         setGlobalName(response.data.user.name); // Corrigir para response.data.user.name
-        setGlobalEmail(response.data.user.email); // Corrigir para response.data.user.email
+        setGlobalEmail(response.data.user.email);
+        setGlobalToken(response.data.token);
+         // Corrigir para response.data.user.email
+        setIsLoggedIn(true); // Marcar como logado
 
         // Armazena as informações no localStorage
         localStorage.setItem('email', response.data.user.email);
         localStorage.setItem('name', response.data.user.name);
         localStorage.setItem('codigo', response.data.user.id); // Armazenar ID se necessário
+        localStorage.setItem('IsLoggedIn', "true"); // Salva status de login no localStorage
 
         console.log("Login bem-sucedido", response.data);
         navigate("/"); // Ajuste conforme a rota da sua aplicação

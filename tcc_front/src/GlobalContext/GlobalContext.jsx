@@ -7,10 +7,26 @@ const initialState = {
   codigo: "",
   email: "",
   name: "",
+  token: "",
+  user: {
+    id: "",  // Definindo um id vazio por padrão
+  },
 };
+
 
 const Reducer = (state, action) => {
   switch (action.type) {
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload,
+      };
+      case "SET_TOKEN":
+        return {
+          ...state,
+          token: action.payload,
+        };
+      
     case "SET_CODIGO":
       return {
         ...state,
@@ -96,6 +112,7 @@ export const GlobalContextProvider = ({ children }) => {
     const storedEmail = localStorage.getItem("email");
     const storedCodigo = localStorage.getItem("codigo");
     const loggedInStatus = localStorage.getItem("IsLoggedIn") === "true";
+    const storedToken = localStorage.getItem("jwtToken");
 
     if (storedEmail) {
       dispatch({ type: "SET_EMAIL", payload: storedEmail });
@@ -106,7 +123,19 @@ export const GlobalContextProvider = ({ children }) => {
     if (loggedInStatus) {
       dispatch({ type: "ISLOGGED_IN", payload: loggedInStatus });
     }
+    if (storedToken) {
+      dispatch({ type: "SET_TOKEN", payload: storedToken });
+    }
   }, []);
+
+  const setToken = (token) => {
+    dispatch({
+      type: "SET_TOKEN",
+      payload: token,
+    });
+    localStorage.setItem("jwtToken", token); // Salvar o token no localStorage
+  };
+  
 
   const setName = (name) => {
     dispatch({
@@ -203,6 +232,7 @@ export const GlobalContextProvider = ({ children }) => {
         setCodigo,
         setEmail,
         setName,
+        setToken,
       }}
     >
       {children}

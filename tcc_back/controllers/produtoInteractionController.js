@@ -1,28 +1,21 @@
 const Produto = require('../models/produto'); // Model relacionado à tabela `produtos`
 const { Sequelize } = require('sequelize'); // Importando Sequelize para garantir o uso correto das funções
 
+
 class produtoInteractionController {
     
     // Função para validar dados de entrada
-    validateProductData({ event_time, event_type, product_id, category_id, category_code, brand, price, user_id, user_session, titulo, descricao, imagesrc }) {
-        if (!event_time || !event_type || !product_id || !category_id || !category_code || !brand || !price || !user_id || !user_session || !titulo || !descricao || !imagesrc) {
-            return 'Todos os campos são obrigatórios.';
-        }
-        return null; // Se tudo estiver ok
-    }
-
-    // Criar uma nova interação de produto
     async createInteraction(req, res) {
-        const { event_time, event_type, product_id, category_id, category_code, brand, price, user_id, user_session, titulo, descricao, imagesrc } = req.body;
-
-        // Validar dados de entrada
-        const validationError = this.validateProductData(req.body);
-        if (validationError) {
-            return res.status(400).json({ error: validationError });
-        }
-
         try {
-            const newProduto = Produto.build({
+            const { event_time, event_type, product_id, category_id, category_code, brand, price, user_id, user_session, title, description, image } = req.body;
+    
+            // Validação dos campos obrigatórios
+            if (!event_time || !event_type || !product_id || !category_id || !category_code || !brand || !price || !user_id || !user_session || !title || !description || !image) {
+                return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+            }
+    
+            // Criação do novo produto
+            const produto = await Produto.create({
                 event_time,
                 event_type,
                 product_id,
@@ -32,14 +25,13 @@ class produtoInteractionController {
                 price,
                 user_id,
                 user_session,
-                titulo,
-                descricao,
-                imagesrc
+                title,
+                description,
+                image
             });
-
-            await newProduto.save();
-
-            res.status(201).json(newProduto);
+    
+            // Resposta com o produto criado
+            res.status(201).json(produto);
         } catch (error) {
             console.error('Erro ao criar interação do produto:', error);
             res.status(500).json({ error: 'Erro ao criar interação do produto' });
@@ -49,33 +41,28 @@ class produtoInteractionController {
     // Método para listar produtos com `product_id` distinto
     async findDistinctProducts(req, res) {
         try {
-            const produtos = await Produto.findAll({
-                attributes: [
-                    [Sequelize.fn('DISTINCT', Sequelize.col('product_id')), 'product_id'],
-                    'event_time',
-                    'event_type',
-                    'category_id',
-                    'category_code',
-                    'brand',
-                    'price',
-                    'user_id',
-                    'user_session',
-                    'titulo',
-                    'descricao',
-                    'imagesrc'
-                ],
-                limit: 100, // Limitar a 100 registros
-                order: [
-                    ['event_time', 'DESC'] // Opcional: ordena por data de evento, caso necessário
-                ]
-            });
-
+            const produtos = await Produto.sequelize.query(
+                `
+                SELECT DISTINCT product_id, image, id, event_time, event_type, category_id, category_code, brand, price, user_id, user_session, title, description
+                FROM produtos
+                WHERE image != :defaultImage
+                `,
+                {
+                    type: Sequelize.QueryTypes.SELECT,
+                    replacements: {
+                        defaultImage: 'https://th.bing.com/th?q=Imagem+De+Sem+Produto&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=pt-BR&cc=BR&setlang=pt-br&adlt=moderate&t=1&mw=247'
+                    }
+                }
+            );
+    
             res.status(200).json(produtos);
         } catch (error) {
             console.error('Erro ao listar produtos distintos:', error);
             res.status(500).json({ error: 'Erro ao listar produtos distintos' });
         }
     }
+    
+    
 
     // Método para listar todos os produtos
     async list(req, res) {
@@ -104,6 +91,22 @@ class produtoInteractionController {
         }
     }
 
+    async searchById2(req, res) {
+        const { id } = req.params;
+        try {
+            const produto = await Produto.findOne({ where: { id } }); // Certifique-se de usar findOne com um filtro único
+            if (produto) {
+                res.status(200).json(produto);
+            } else {
+                res.status(404).json({ error: 'Produto não encontrado' });
+            }
+        } catch (error) {
+            console.error('Erro ao buscar produto:', error);
+            res.status(500).json({ error: 'Erro ao buscar produto' });
+        }
+    }
+    
+
     // Buscar produto por 'product_id'
     async searchByProductId(req, res) {
         const { product_id } = req.params;
@@ -123,7 +126,7 @@ class produtoInteractionController {
     // Atualizar produto
     async update(req, res) {
         const { id } = req.params;
-        const { event_time, event_type, product_id, category_id, category_code, brand, price, user_id, user_session, titulo, descricao, imagesrc } = req.body;
+        const { event_time, event_type, product_id, category_id, category_code, brand, price, user_id, user_session, title, description, image } = req.body;
 
         // Validar dados de entrada
         const validationError = this.validateProductData(req.body);
@@ -143,9 +146,9 @@ class produtoInteractionController {
                 produto.price = price || produto.price;
                 produto.user_id = user_id || produto.user_id;
                 produto.user_session = user_session || produto.user_session;
-                produto.titulo = titulo || produto.titulo;
-                produto.descricao = descricao || produto.descricao;
-                produto.imagesrc = imagesrc || produto.imagesrc;
+                produto.title = title || produto.title;
+                produto.description = description || produto.description;
+                produto.image = image || produto.image;
                 await produto.save();
                 res.status(200).json(produto);
             } else {
